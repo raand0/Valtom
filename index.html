@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valtom - Password Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo">Valtom</h1>
+            <p class="tagline">Your passwords, perfectly protected</p>
+        </div>
+
+        <!-- Login Page -->
+        <div id="loginPage" class="auth-container hidden">
+            <div class="auth-card">
+                <h2 class="auth-title">Welcome Back</h2>
+                <p class="auth-subtitle">Enter your credentials to access your vault</p>
+                
+                <div class="error-message" id="loginError"></div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label class="form-label" for="loginUsername">Username</label>
+                        <input type="text" id="loginUsername" class="form-input" placeholder="Enter your username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password">
+                    </div>
+                    
+                    <button type="submit" class="auth-btn">Sign In</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Signup Page -->
+        <div id="signupPage" class="auth-container hidden">
+            <div class="auth-card">
+                <h2 class="auth-title">Create Account</h2>
+                <p class="auth-subtitle">Keep these credentials safe. You cannot change or delete or restore your credentials after.</p>
+                
+                <div class="error-message" id="signupError"></div>
+                <div class="success-message" id="signupSuccess"></div>
+                
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label class="form-label" for="signupUsername">Username</label>
+                        <input type="text" id="signupUsername" class="form-input" placeholder="Choose a username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" class="form-input" placeholder="Create a strong password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password">
+                    </div>
+                    
+                    <button type="submit" class="auth-btn">Create Account</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main App -->
+        <div id="mainApp" class="hidden">
+            <div class="main-content">
+                <div class="sidebar">
+                    <h3>Navigation</h3>
+                    <div class="nav-item active addAcc">
+                        <svg class="nav-icon" viewBox="0 0 24 24">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                        Add New Account
+                    </div>
+                    <div class="nav-item accounts">
+                        <svg class="nav-icon" viewBox="0 0 24 24">
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                        </svg>
+                        All Accounts
+                    </div>
+                    <button class="logout-btn" onclick="logout()">
+                        Logout
+                    </button>
+                </div>
+
+                <div class="content-area" id="contentDisplay">
+                    <!-- Content will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Add/Edit Account -->
+        <div class="modal-overlay" id="modalOverlay" style="display: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="modal-title">Add New Account</h3>
+                    <button class="modal-close" onclick="hideModal()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label" for="servc">Service Name</label>
+                        <input type="text" id="servc" class="form-input" placeholder="e.g., Gmail, Facebook">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="username">Username/Email</label>
+                        <input type="text" id="username" class="form-input" placeholder="Enter username or email">
+                    </div>
+                    
+                    <div class="form-group password-field-group">
+                        <label class="form-label" for="pass">Password</label>
+                        <div class="password-input-container">
+                            <input type="text" id="pass" class="form-input password-input" placeholder="Enter password">
+                            <button type="button" class="paste-btn">Paste</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="hideModal()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                        Cancel
+                    </button>
+                    <button class="btn btn-primary" id="saveBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                        </svg>
+                        Save Password
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>

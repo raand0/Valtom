@@ -1,0 +1,40 @@
+<div class="content-header">
+    <h2 class="content-title">Password Generator</h2>
+    <button class="add-btn" onclick="showModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+        </svg>
+        Add New Account
+    </button>
+</div>
+
+<div class="password-generator">
+    <div class="generator-header">
+        <h3 class="generator-title">Password Generator</h3>
+        <button class="generate-btn">Generate</button>
+    </div>
+    <div class="password-field">
+        <div class="password-display"></div>
+        <button class="copy-btn">Copy</button>
+    </div>
+    <div class="generator-options">
+        <div class="option-group">
+            <label class="option-label">Length: 12</label>
+            <input type="range" class="slider" min="8" max="32" value="12">
+        </div>
+        <div class="option-group">
+            <div class="checkbox-group">
+                <input type="checkbox" id="nums" class="checkbox" checked>
+                <label class="option-label" for="nums">Include Numbers</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="syms" class="checkbox" checked>
+                <label class="option-label" for="syms">Include Symbols</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="upper" class="checkbox" checked>
+                <label class="option-label" for="upper">Include Uppercase</label>
+            </div>
+        </div>
+    </div>
+</div>
