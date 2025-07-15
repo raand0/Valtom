@@ -9,14 +9,24 @@ window.logout = logout;
 
 const fs = require('fs');
 const path = require('path');
-const dataPath = path.join(__dirname, 'accounts.json');
-const loginFilePath = path.join(__dirname, 'login.json');
+const { app } = require('electron').remote || require('@electron/remote');
+
+// Use userData directory for storing files (writable in packaged apps)
+const userDataPath = app.getPath('userData');
+const dataPath = path.join(userDataPath, 'accounts.json');
+const loginFilePath = path.join(userDataPath, 'login.json');
+const keyFile = path.join(userDataPath, 'key.json');
+
 const crypto = require('crypto');
 const algorithm = 'aes-256-cbc';
-const keyFile = path.join(__dirname, 'key.json');
 
 let secretKey, iv;
 let allAccounts = []; // Store all accounts for filtering
+
+// Ensure userData directory exists
+if (!fs.existsSync(userDataPath)) {
+    fs.mkdirSync(userDataPath, { recursive: true });
+}
 
 // Load or generate encryption key + iv
 if (fs.existsSync(keyFile)) {
@@ -683,13 +693,20 @@ function initializeModal() {
             const serviceName = serviceNameInput.value.trim();
             const userName = userNameInput.value.trim();
             const password = passwordInput.value.trim();
-
+    
             if (serviceName && userName && password != "") {
                 saveInfo(serviceName, userName, password);
                 serviceNameInput.value = "";
                 userNameInput.value = "";
                 passwordInput.value = "";
                 hideModal();
+                
+                // Refresh the account list if we're on the password page
+                const listContainer = document.querySelector('.password-list');
+                if (listContainer) {
+                    listContainer.innerHTML = '';
+                    displayAccounts(allAccounts, listContainer);
+                }
             } else {
                 console.log("empty fields!");
                 return;
@@ -728,6 +745,48 @@ document.addEventListener('DOMContentLoaded', () => {
     if (loginForm) {
         loginForm.addEventListener('submit', handleLogin);
     }
+
+    // Add keyboard navigation for login and signup forms
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            const activeElement = document.activeElement;
+            const isLoginPage = !loginPage.classList.contains('hidden');
+            const isSignupPage = !signupPage.classList.contains('hidden');
+            
+            if (isLoginPage) {
+                const loginUsername = document.getElementById('loginUsername');
+                const loginPassword = document.getElementById('loginPassword');
+                
+                if (e.key === 'ArrowDown' && activeElement === loginUsername) {
+                    e.preventDefault();
+                    loginPassword.focus();
+                } else if (e.key === 'ArrowUp' && activeElement === loginPassword) {
+                    e.preventDefault();
+                    loginUsername.focus();
+                }
+            } else if (isSignupPage) {
+                const signupUsername = document.getElementById('signupUsername');
+                const signupPassword = document.getElementById('signupPassword');
+                const confirmPassword = document.getElementById('confirmPassword');
+                
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (activeElement === signupUsername) {
+                        signupPassword.focus();
+                    } else if (activeElement === signupPassword) {
+                        confirmPassword.focus();
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (activeElement === confirmPassword) {
+                        signupPassword.focus();
+                    } else if (activeElement === signupPassword) {
+                        signupUsername.focus();
+                    }
+                }
+            }
+        }
+    });
     
     // Initialize main app navigation (only if main app is visible)
     const addTab = document.querySelector('.addAcc');

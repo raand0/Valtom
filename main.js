@@ -1,4 +1,6 @@
 const { app, BrowserWindow } = require('electron');
+const remoteMain = require('@electron/remote/main');
+remoteMain.initialize();
 
 let win;
 app.whenReady().then(()=>{
@@ -7,8 +9,10 @@ app.whenReady().then(()=>{
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      enableRemoteModule: true
     }
   });
+  remoteMain.enable(win.webContents);
   win.setMenu(null);
   win.setMinimumSize(800, 500);
   win.maximize();
