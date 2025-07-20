@@ -18,7 +18,7 @@ const loginFilePath = path.join(userDataPath, 'login.json');
 const keyFile = path.join(userDataPath, 'key.json');
 
 const crypto = require('crypto');
-const algorithm = 'aes-256-cbc';
+const algorithm = '';
 
 let secretKey, iv;
 let allAccounts = []; // Store all accounts for filtering
