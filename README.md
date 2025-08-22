@@ -1,6 +1,9 @@
 # Valtom
 A **Private Offline Password Manager** for Windows and Linux, built with **Node.js** and **Electron.js**
 
+## Screenshots
+<img width="1646" height="761" alt="u" src="https://github.com/user-attachments/assets/dbe4ddc8-658d-4ffa-9dd5-65861ab63dfc" />
+
 ## Features
 * 100% Offline – no internet needed
 * Works on both **Windows** and **Linux**
